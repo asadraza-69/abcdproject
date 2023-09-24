@@ -1,0 +1,45 @@
+html,
+body,
+.page {
+  padding: 0px;
+  margin: 20px;
+  outline: none;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 14px;
+  color: #666;
+  line-height: 22px;
+}
+.page {
+  page-break-after: always;
+  size: landscape;
+
+}
+@media print {
+  @page {
+    size: landscape; /* Set the page orientation to landscape */
+  }
+
+  .page {
+    page-break-after: always; /* Start a new page after each .page div */
+  }
+}
+.container {
+  margin: 0px;
+  min-height: 80%;
+  margin-bottom: 15px;
+}
+/* div {
+  border: 1px solid black;
+} */
+.dress-img-container {
+  text-align: center;
+  max-width: 50%;
+}
+
+.dress-img {
+  max-width: 100%; /* Set maximum width to 100% of the parent div */
+  max-height: 80%; /* Set maximum height to 100% of the parent div */
+}
+.dress-desc-container {
+  max-width: 50%;
+}
