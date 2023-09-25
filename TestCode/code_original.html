@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Specific Section</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .title {
+            font-size: 32px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: purple;
+            text-align: center;
+        }
+
+        .sub-title {
+            font-size: 24px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .text {
+            font-size: 14px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        /* .printing-section-mode-1,
+        .printing-section-mode-2,
+        .portrait-mode {
+            display: none;
+        }
+        .show-mode-1 .printing-section-mode-1,
+        .show-mode-2 .printing-section-mode-2,
+        .show-portrait .portrait-mode {
+            display: block;
+        } */
+
+        /* Hide buttons in print view */
+        @media print {
+            button {
+                display: none;
+            }
+
+            /* Define page breaks for portrait mode */
+            .portrait-mode {
+                /* page-break-before: always;  */
+            }
+        }
+
+        @media print {
+            .page-two {
+                page-break-before: always;
+            }
+        }
+
+        .printing-section-mode-2,
+        .portrait-mode {
+            display: none;
+        }
+
+
+
+        /* Styles for print media */
+        @media print {
+            .col-6.page-one {
+                width: 100%;
+                /* Change the width to 100% for printing */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <button id="landscapeMode1Button">Picture on Left – Text on Right </button>
+        <button id="landscapeMode2Button">Picture on Right – Text on Left </button>
+        <button id="portraitModeButton">Portrait mode</button>
+        <div class="printing-section-mode-1 " id="printing-section-mode-1">
+            <h1 class="title">Mother Teresa</h1>
+            <div class="row">
+                <div class="col-6">
+                    <img class="img-fluid" src="https://abcd2.projectabcd.com/images/dress_images/Slide50.PNG" alt="">
+                </div>
+                <div class="col-6">
+                    <div>
+                        <h2 class="sub-title">Description</h2>
+                        <p class="text">Agnes Gonxhe Bojaxhiu, known to the world as 'Mother Teresa' was a famous
+                            Albanian-Indian nun, who founded the Missionaries of Charity. She lived in India most of her
+                            life helping the poor and weak. She became a nun at a very young age. She was admired all
+                            over the world for her charitable work, including feeding the hungry, and looking after the
+                            sick.</p>
+                    </div>
+                    <div>
+                        <h2 class="sub-title">Did you know?</h2>
+                        <p class="text">Mother Teresa won the Nobel Peace Prize for her charitable contributions to
+                            society.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="printing-section-mode-2" id="printing-section-mode-2">
+            <h1 class="title">Mother Teresa</h1>
+            <div class="row">
+                <div class="col-6">
+                    <div>
+                        <h2 class="sub-title">Description</h2>
+                        <p class="text">Agnes Gonxhe Bojaxhiu, known to the world as 'Mother Teresa' was a famous
+                            Albanian-Indian nun, who founded the Missionaries of Charity. She lived in India most of her
+                            life helping the poor and weak. She became a nun at a very young age. She was admired all
+                            over the world for her charitable work, including feeding the hungry, and looking after the
+                            sick.</p>
+                    </div>
+                    <div>
+                        <h2 class="sub-title">Did you know?</h2>
+                        <p class="text">Mother Teresa won the Nobel Peace Prize for her charitable contributions to
+                            society.</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <img class="img-fluid" src="https://abcd2.projectabcd.com/images/dress_images/Slide50.PNG" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="portrait-mode" id="portrait-mode">
+            <h1 class="title">Mother Teresa</h1>
+            <div class="row">
+                <div class="col-6 page-one">
+                    <img class="img-fluid" src="https://abcd2.projectabcd.com/images/dress_images/Slide50.PNG" alt="">
+                </div>
+                <div class="col-6 page-two">
+                    <div>
+                        <h2 class="sub-title">Description</h2>
+                        <p class="text">Agnes Gonxhe Bojaxhiu, known to the world as 'Mother Teresa' was a famous
+                            Albanian-Indian nun, who founded the Missionaries of Charity. She lived in India most of her
+                            life helping the poor and weak. She became a nun at a very young age. She was admired all
+                            over the world for her charitable work, including feeding the hungry, and looking after the
+                            sick.</p>
+                    </div>
+                    <div>
+                        <h2 class="sub-title">Did you know?</h2>
+                        <p class="text">Mother Teresa won the Nobel Peace Prize for her charitable contributions to
+                            society.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script>
+
+
+        // Get the elements by their IDs
+        const landscapeMode1Button = document.getElementById('landscapeMode1Button');
+        const landscapeMode2Button = document.getElementById('landscapeMode2Button');
+        const portraitModeButton = document.getElementById('portraitModeButton');
+
+        // Get the elements to be manipulated by their classes
+        const printingSectionMode1 = document.querySelectorAll('.printing-section-mode-1');
+        const printingSectionMode2 = document.querySelectorAll('.printing-section-mode-2');
+        const portraitMode = document.querySelectorAll('.portrait-mode');
+
+        // Add event listeners to the buttons
+        landscapeMode1Button.addEventListener('click', function () {
+            // Show printing section mode 1 and hide the others
+            printingSectionMode1.forEach(element => element.style.display = 'block');
+            printingSectionMode2.forEach(element => element.style.display = 'none');
+            portraitMode.forEach(element => element.style.display = 'none');
+        });
+
+        landscapeMode2Button.addEventListener('click', function () {
+            // Show printing section mode 2 and hide the others
+            printingSectionMode1.forEach(element => element.style.display = 'none');
+            printingSectionMode2.forEach(element => element.style.display = 'block');
+            portraitMode.forEach(element => element.style.display = 'none');
+        });
+
+        portraitModeButton.addEventListener('click', function () {
+            // Show portrait mode and hide the others
+            printingSectionMode1.forEach(element => element.style.display = 'none');
+            printingSectionMode2.forEach(element => element.style.display = 'none');
+            portraitMode.forEach(element => element.style.display = 'block');
+        });
+
+    </script>
+</body>
+
+</html>
