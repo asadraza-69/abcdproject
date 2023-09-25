@@ -90,8 +90,8 @@
         <input type="text" hidden value="" id="pic-height" name="pic-height">
 
         <div class="btn-block">
-          <button href="help.php">Generate</button>
-          <button type="submit" href="/">Help</button>
+          <button type="submit" id="generate-button">Generate</button>
+          <button type="button" id="help-button">Help</button>
         </div>
       </form>
     </div>

@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         };
         console.log("payload",dataToSend)
         $.ajax({
-            url: "/abcdbook/backend.php",
+            url: "/abcdproject/backend.php",
             type: 'POST',
             data: JSON.stringify(dataToSend),
             success: function(data) {

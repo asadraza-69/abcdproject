@@ -1,5 +1,9 @@
 $(document).ready(function () {
-
+    
+    $("#help-button").click(function () {
+        // Redirect to help.php
+        window.location.href = "/abcdproject/help.php";
+    });
     $.get("slide_numbers.txt", function (data) {
         // console.log(data);
         $(".dress-textarea").text(data);
