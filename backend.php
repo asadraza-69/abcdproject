@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $response = array(
         "message" => "This is a POST request response.",
+        "data" => $responseList
     );
     http_response_code(200);
     echo json_encode($response);
