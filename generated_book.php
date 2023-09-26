@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/generated_book.css" />
+    <link rel="stylesheet" href="assets/css/loader.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Generate Book</title>
     <link rel="icon" href="assets/img/abcd_logo2.png" type="image/x-icon">
@@ -31,7 +32,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <div class="container"></div>
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+    <div class="container">
+    
+    </div>
 </body>
 <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -44,6 +54,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <script>
     $(document).ready(function() {
+        
+        function LayoutC(data) {
+            for (var i = 0; i < data.length; i++) {
+                var idx = i+1
+                var item = data[i];
+                var l_html = `
+                <div class="portrait-mode stndrd-dimensions" id="portrait-mode">
+                    <h1 class="title d-print-none">${item.data.name}</h1>
+                    <div class="row">
+                        <div class="col-6 page-one">
+                            <img
+                            class="img-fluid img-fluid-portrait"
+                            src="https://abcd2.projectabcd.com/images/dress_images/${item.data.image_url}"
+                            alt=""
+                            />
+                        </div>
+                        <div class="col-6 page-two d-flex flex-column justify-content-around">
+                            <div>
+                            <h1 class="title d-none d-print-block">${item.data.name}</h1>
+                            <h2 class="sub-title potrait-sub-title">Description</h2>
+                            <p class="text potrait-sub-title">
+                                ${item.data.description}
+                            </p>
+                            </div>
+                            <div>
+                            <h2 class="sub-title potrait-sub-title">Did you know?</h2>
+                            <p class="text potrait-sub-title">
+                                ${item.data.did_you_know}
+                            </p>
+                            </div>
+                            <div class="d-flex flex-row justify-content-end mb-3">
+                            <button id= "dress-id" class="btn btn-info mx-2" disabled>Dress Id# ${item.data.id}</button>
+                            <button id= "page-id" class="btn btn-info" disabled>Page# ${idx}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            // console.log("l_html :",l_html)
+            $('.container').append(l_html);
+                // console.log('Response Item:', item);
+                // console.log('Name:', item.data);
+            }            
+        }
+        function LayoutB(data) {
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                console.log('Response Item:', item);
+                console.log('Name:', item.name);
+            }            
+            
+            return data;
+        }
+        function LayoutA(data) {
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                console.log('Response Item:', item);
+                console.log('Name:', item.name);
+            }            
+            
+            return data;
+        }
         spic_width = <?php echo $pic_width != -1 ? json_encode($pic_width) : 0 ?>;
         spic_height = <?php echo $pic_height != -1 ? json_encode($pic_height) : 0 ?>;
 
@@ -64,28 +135,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var pic_width = <?php echo json_encode($pic_width); ?>;
         var pic_height = <?php echo json_encode($pic_height); ?>;
 
-        // Now you can use these JavaScript variables
-        // console.log("php-dressTextarea: " + dressTextarea);
-        // console.log("php-layout: " + layout);
-        // console.log("php-sorting: " + sorting);
-        // console.log("php-numbering: " + numbering);
-        // console.log("php-pic_width: " + pic_width);
-        // console.log("php-pic_height: " + pic_height);
         var dataToSend = {
             dress_list: dressTextarea,
             layout: layout,
             sorting: sorting,
             numbering: numbering
         };
-        console.log("payload",dataToSend)
+        // console.log("payload",dataToSend)
         $.ajax({
             url: "/abcdproject/backend.php",
             type: 'POST',
             data: JSON.stringify(dataToSend),
-            success: function(data) {
-                // alert(data);
+            success: function(response) {
+                $('.spinner').hide();
                 alert('Sucess');
-                // $("#table-body").html(data);
+                var dataFromBackend = response.data;
+                if(layout == 'a'){
+                    console.log('layout-A:', layout)
+                    LayoutA(dataFromBackend)
+                }
+                if(layout == 'b'){
+                    console.log('layout-B:', layout)
+                    LayoutB(dataFromBackend)
+                }   
+                if(layout == 'c'){
+                    console.log('layout-C:', layout)
+                    LayoutC(dataFromBackend)
+                }
+    
             },
             error: function() {
                 alert('Error');
