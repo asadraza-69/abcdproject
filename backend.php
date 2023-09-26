@@ -19,14 +19,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $responseList = [];
     // // Echo the data
     $dressTextarea = explode(',', $dressTextarea);
-    $dressTextarea = [26, 27, 28, 29, 30];
+    // $dressTextarea = [26, 27, 28, 29, 30];
     // https://abcd2.projectabcd.com/images/dress_images/Slide50.PNG
     // https://abcd2.projectabcd.com/api/getinfo.php?id=50
     $url = 'https://abcd2.projectabcd.com/api/getinfo.php?id=';
     foreach ($dressTextarea as $dressNumber) {
-        $req = $url.$dressNumber;
-        $response = file_get_contents($req);
-        if ($response !== false) {
+        $req = $url.urlencode($dressNumber);
+        $options = [
+            'http' => [
+                'method' => 'GET',
+                'header' => 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+            ],
+        ];
+        $context = stream_context_create($options);
+        $response = file_get_contents($req, false, $context);
+        
+        if ($response === false) {
+            // Handle the error
+            $error_message = error_get_last();
+            echo "HTTP request failed: " . $error_message['message'];
+        } else {
             $responseData = json_decode($response);
             // $response_type = gettype($responseData);
             // echo("response_code".$responseData->response_code);

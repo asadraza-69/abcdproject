@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="rect5"></div>
     </div>
     <div class="container">
-    
+
     </div>
 </body>
 <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
@@ -54,10 +54,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <script>
     $(document).ready(function() {
-        
+        $.get("preferences.txt", function(pdata) {
+            const data = parseFileContent(pdata);
+            // console.log("data",data)
+            const textSize = data.TEXT_SIZE;
+            const textFont = data.TEXT_FONT;
+            const titleSize = data.TITLE_SIZE;
+            const titleFont = data.TITLE_FONT;
+            const subtitleSize = data.SUBTITLE_SIZE;
+            const subtitleFont = data.SUBTILE_FONT;
+            const picWidth = data.PIC_WIDTH !== undefined && data.PIC_WIDTH !== null ? data.PIC_WIDTH : null;
+            const picHeight = data.PIC_HEIGHT !== undefined && data.PIC_HEIGHT !== null ? data.PIC_HEIGHT : null;
+            console.log("textSize", textSize)
+            console.log("textFont", textFont)
+            console.log("titleSize", titleSize)
+            console.log("titleFont", titleFont)
+            console.log("subtitleSize", subtitleSize)
+            console.log("subtitleFont", subtitleFont)
+            console.log("picWidth", picWidth)
+            console.log("picHeight", picHeight)
+            $(".text").css({
+                "font-size": textSize,
+                "font-family": textFont // Set your desired font family
+            });
+            $(".title").css({
+                "font-size": titleSize,
+                "font-family": titleFont // Set your desired font family
+            });
+            $(".sub-title").css({
+                "font-size": subtitleSize,
+                "font-family": subtitleFont // Set your desired font family
+            });
+
+
+        });
+
+
         function LayoutC(data) {
             for (var i = 0; i < data.length; i++) {
-                var idx = i+1
+                var idx = i + 1
                 var item = data[i];
                 var l_html = `
                 <div class="portrait-mode stndrd-dimensions" id="portrait-mode">
@@ -67,8 +102,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <img
                             class="img-fluid img-fluid-portrait"
                             src="https://abcd2.projectabcd.com/images/dress_images/${item.data.image_url}"
-                            alt=""
+                            alt="${item.data.name}"
                             />
+                            
                         </div>
                         <div class="col-6 page-two d-flex flex-column justify-content-around">
                             <div>
@@ -85,34 +121,117 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </p>
                             </div>
                             <div class="d-flex flex-row justify-content-end mb-3">
-                            <button id= "dress-id" class="btn btn-info mx-2" disabled>Dress Id# ${item.data.id}</button>
-                            <button id= "page-id" class="btn btn-info" disabled>Page# ${idx}</button>
+                            <button id= "dress-id" class="dress-id btn btn-info mx-2" disabled>Dress Id# ${item.data.id}</button>
+                            <button id= "page-id" class="page-id btn btn-info" disabled>Page# ${idx}</button>
                             </div>
                         </div>
                     </div>
                 </div>`
-            // console.log("l_html :",l_html)
-            $('.container').append(l_html);
+                // console.log("l_html :",l_html)
+                $('.container').append(l_html);
                 // console.log('Response Item:', item);
                 // console.log('Name:', item.data);
-            }            
-        }
-        function LayoutB(data) {
-            for (var i = 0; i < data.length; i++) {
-                var item = data[i];
-                console.log('Response Item:', item);
-                console.log('Name:', item.name);
-            }            
-            
+            }
+
+            $(".portrait-mode").each(function() {
+                $(this).css({
+                    "page-break-before": "always", // Optional: Force a page break before this element
+                });
+                $(this).find(".page-one").css({
+                    "page-break-before": "always", // Optional: Force a page break before this element
+                });
+                $(this).find(".page-two").css({
+                    "page-break-before": "always", // Optional: Force a page break before this element
+                });
+
+                $(this).find("@page").css({
+                    size: "portrait",
+                });
+            });
             return data;
         }
+
         function LayoutA(data) {
             for (var i = 0; i < data.length; i++) {
+                var idx = i + 1
                 var item = data[i];
-                console.log('Response Item:', item);
-                console.log('Name:', item.name);
-            }            
-            
+                var l_html = `
+                <div class="printing-section-mode-1 stndrd-dimensions" id="printing-section-mode-1">
+        <h1 class="title">${item.data.name}</h1>
+        <div class="row">
+          <div class="col-6">
+            <img
+              class="img-fluid"
+              src="https://abcd2.projectabcd.com/images/dress_images/${item.data.image_url}"
+              alt="${item.data.name}"
+            />
+          </div>
+          <div class="col-6 d-flex flex-column justify-content-around">
+            <div>
+              <h2 class="sub-title">Description</h2>
+              <p class="text">
+                ${item.data.description}
+              </p>
+            </div>
+            <div>
+              <h2 class="sub-title">Did you know?</h2>
+              <p class="text">
+              ${item.data.did_you_know}
+              </p>
+            </div>
+            <div class="d-flex flex-row justify-content-end mb-3">
+                <button id= "dress-id" class="dress-id btn btn-info mx-2" disabled>Dress Id# ${item.data.id}</button>
+                <button id= "page-id" class="page-id btn btn-info" disabled>Page# ${idx}</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+                $('.container').append(l_html);
+            }
+
+            return data;
+        }
+
+        function LayoutB(data) {
+            for (var i = 0; i < data.length; i++) {
+                var idx = i + 1
+                var item = data[i];
+                l_html = `<div
+        class="printing-section-mode-2 stndrd-dimensions"
+        id="printing-section-mode-2"
+      >
+        <h1 class="title">${item.data.name}</h1>
+        <div class="row">
+          <div class="col-6 d-flex flex-column justify-content-around">
+            <div>
+              <h2 class="sub-title">Description</h2>
+              <p class="text">
+              ${item.data.description}
+              </p>
+            </div>
+            <div>
+              <h2 class="sub-title">Did you know?</h2>
+              <p class="text">
+              ${item.data.did_you_know}
+              </p>
+            </div>
+            <div class="d-flex flex-row justify-content-start mb-3">
+                <button id= "dress-id" class="dress-id btn btn-info mx-2" disabled>Dress Id# ${item.data.id}</button>
+                <button id= "page-id" class="page-id btn btn-info" disabled>Page# ${idx}</button>
+            </div>
+          </div>
+          <div class="col-6">
+            <img
+              class="img-fluid"
+              src="https://abcd2.projectabcd.com/images/dress_images/${item.data.image_url}"
+              alt="${item.data.name}"
+            />
+          </div>
+        </div>
+      </div>`;
+                $('.container').append(l_html);
+            }
+
             return data;
         }
         spic_width = <?php echo $pic_width != -1 ? json_encode($pic_width) : 0 ?>;
@@ -147,48 +266,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             type: 'POST',
             data: JSON.stringify(dataToSend),
             success: function(response) {
-                $('.spinner').hide();
-                alert('Sucess');
                 var dataFromBackend = response.data;
-                if(layout == 'a'){
+                $('.spinner').hide();
+                if (layout == 'a') {
                     console.log('layout-A:', layout)
                     LayoutA(dataFromBackend)
                 }
-                if(layout == 'b'){
+                if (layout == 'b') {
                     console.log('layout-B:', layout)
                     LayoutB(dataFromBackend)
-                }   
-                if(layout == 'c'){
+                }
+                if (layout == 'c') {
                     console.log('layout-C:', layout)
                     LayoutC(dataFromBackend)
                 }
-    
+
+
+                if (numbering == 'b') {
+                    $(".dress-id").hide()
+                    console.log('numbering-B:', numbering)
+
+                }
+                if (numbering == 'c') {
+                    $(".page-id").hide()
+                    console.log('numbering-C:', numbering)
+
+                }
+
             },
             error: function() {
                 alert('Error');
             }
         });
-        // console.log($("#dress-img"));
-        const layoutA = '<div class="page"><div class="container"><div class="row"><div class="col-md-3"></div><div class="col-md-6 d-flex justify-content-center"><h1 class="title">Mother teresa</h1></div><div class="col-md-3"></div></div><div class="row">    <div class="col-md-6 d-flex justify-content-center">        <img src="assets/img/abcd_logo2.png" alt="">    </div>    <div class="col-md-6">        <div class="d-flex flex-column justify-content-start align-items-start">            <h2 class="sub-title-1">sub title</h2>            <p class="sub-text-1">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda, hic.</p>        </div>        <div class="d-flex flex-column justify-content-start align-items-start">            <h2 class="sub-title-1">sub title 2</h2>            <p class="sub-text-1">Lorem ipsum dolor sit amet.</p>        </div>        <div class="d-flex flex-row justify-content-end align-items-end">            <button type="button" class="btn btn-primary m-2">Dress ID#</button>            <button type="button" class="btn btn-primary m-2">Page Number#</button>        </div>    </div></div></div></div>'
 
-
-        // dressTextarea = dressTextarea.split(', ');
-        // console.log('dressTextarea:',typeof dressTextarea);
-        // console.log('dressTextarea:', dressTextarea);
-
-        // console.log('layout:', layout);
-
-        // if (layout == 'a') {
-        //     $('body').html(layoutA);
-        // }
-        // if (layout == 'b') {
-        //     $('body').html(layoutB);
-        // }
-        // if (layout == 'c') {
-        //     $('body').html(layoutC);
-        // }
-        // console.log('sorting:', sorting);
-        // console.log('numbering:', numbering);
     });
 </script>
 
